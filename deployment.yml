@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fe
+  labels:
+    app: fe
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fe
+  template:
+    metadata:
+      labels:
+        app: fe
+    spec:
+      containers:
+      - name: fe
+        image: shellum/fe
+        resources:
+          requests:
+            cpu: "100m"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: USER
+          valueFrom:
+            secretKeyRef:
+              name: my-creds
+              key: user
+        - name: PASS
+          valueFrom:
+            secretKeyRef:
+              name: my-creds
+              key: password
